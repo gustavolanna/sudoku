@@ -5,10 +5,6 @@ import java.util.Set;
 
 public class SudokuPositions {
 
-	private static final int BOUND_VALUE = 9;
-
-	private static final int BLOCK_SIZE = 3;
-
 	private static final String ROW = "R";
 
 	private static final String COLUMN = "C";
@@ -19,14 +15,6 @@ public class SudokuPositions {
 
 	public SudokuPositions(Integer[][] board) {
 		loadPositions(board);
-	}
-
-	public boolean isAllowed(int x, int y, Integer value) {
-		return value == null ||
-				((value > 0 && value <= BOUND_VALUE) &&
-						!positions.contains(row(x, value)) &&
-						!positions.contains(col(y, value)) &&
-						!positions.contains(block(x, y, value)));
 	}
 
 	private void loadPositions(Integer[][] board) {
@@ -40,19 +28,19 @@ public class SudokuPositions {
 
 	public void register(int x, int y, Integer value, Integer oldValue) {
 		if (value != null) {
-			positions.add(row(x, value));
-			positions.add(col(y, value));
+			positions.add(row(y, value));
+			positions.add(col(x, value));
 			positions.add(block(x, y, value));
 		} else if (oldValue != null) {
-			positions.remove(row(x, value));
-			positions.remove(col(y, value));
+			positions.remove(row(y, value));
+			positions.remove(col(x, value));
 			positions.remove(block(x, y, value));
 		}
 	}
 
 	private String block(int x, int y, Integer value) {
-		int blockX = (int) Math.floor(x / BLOCK_SIZE);
-		int blockY = (int) Math.floor(y / BLOCK_SIZE);
+		int blockX = (int) Math.floor(x / SudokuGame.BLOCK_SIZE);
+		int blockY = (int) Math.floor(y / SudokuGame.BLOCK_SIZE);
 		int blockNumber = 3 * blockX + blockY;
 		return key(BLOCK + "-" + blockNumber, value);
 	}
@@ -67,6 +55,14 @@ public class SudokuPositions {
 
 	private String key(String prefix, Integer value) {
 		return prefix + "-" + value;
+	}
+
+	public boolean isAllowed(int x, int y, Integer value) {
+		return value == null ||
+				((value > 0 && value <= SudokuGame.BOUND_VALUE) &&
+						!positions.contains(row(y, value)) &&
+						!positions.contains(col(x, value)) &&
+						!positions.contains(block(x, y, value)));
 	}
 
 }

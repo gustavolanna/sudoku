@@ -15,8 +15,13 @@ public class SudokuGameTest {
 		assertTrue(new SudokuGame().validate());
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowIllegalArgumentExceptionForBoardsWithInvalidDimension() {
+	@Test(expected = SudokuException.class)
+	public void shouldThrowSudokuExceptionForNullBoard() {
+		new SudokuGame(null);
+	}
+
+	@Test(expected = SudokuException.class)
+	public void shouldThrowSudokuExceptionForBoardsWithInvalidDimension() {
 		Integer[][] board = {
 				{2, 7, 1,  9, 5, 6,  3, 4, 4, 8},
 				{9, 5, 6,  3, 4, 8,  2, 7, 1},
@@ -33,18 +38,18 @@ public class SudokuGameTest {
 		new SudokuGame(board);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowIllegalArgumentExceptionForBoardsWithInvalidValues() {
+	@Test(expected = SudokuException.class)
+	public void shouldThrowSudokuExceptionForBoardsWithInvalidValues() {
 		Integer[][] board = {
 				{2, 7, 1,  9, 5, 6,  3, 4, 0},
 				{9, 5, 6,  3, 4, 8,  2, 7, 1},
 				{3, 4, 8,  2, 7, 1,  9, 5, 6},
 
 				{7, 2, 9,  1, 6, 5,  4, 8, 3},
-				{1, 6, 5,  4, 8, 3,  7, 2, 9},
+				{1, 6, 5,  4, 8, 10,  7, 2, 9},
 				{4, 8, 3,  7, 2, 9,  1, 6, 5},
 
-				{5, 1, 2,  6, 9, 7,  8, 3, 4},
+				{5, 1, 11,  6, 9, 7,  8, 3, 4},
 				{6, 9, 7,  8, 3, 4,  5, 1, 2},
 				{8, 3, 4,  5, 1, 2,  6, 9, 7}
 		};
@@ -125,7 +130,7 @@ public class SudokuGameTest {
 				{8, n, 4,  5, n, n,  6, n, 7}
 		};
 		SudokuGame game = new SudokuGame(board);
-		game.fillBoard();
+		game.solveBoard();
 		assertTrue(game.validate());
 	}
 

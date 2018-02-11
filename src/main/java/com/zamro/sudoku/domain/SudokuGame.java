@@ -40,7 +40,7 @@ public class SudokuGame {
 		List<List<Integer>> positions = randomList(random);
 		List<Integer> randomClues = randomClues(random, clues);
 		for (int blockNum = 0; blockNum < BOARD_SIZE; blockNum++) {
-			fillBoard(blockNum, randomClues, numbers.get(blockNum), positions.get(blockNum));
+			createBoard(blockNum, randomClues, numbers.get(blockNum), positions.get(blockNum));
 		}
 	}
 
@@ -94,7 +94,7 @@ public class SudokuGame {
 		return clues;
 	}
 
-	private void fillBoard(int blockNum, List<Integer> totalClues, List<Integer> numbers, List<Integer> positions) {
+	private void createBoard(int blockNum, List<Integer> totalClues, List<Integer> numbers, List<Integer> positions) {
 		Pos pos = getBlockPosition(blockNum);
 		int clues = totalClues.get(blockNum);
 		while (clues > 0 && !numbers.isEmpty()) {
@@ -147,7 +147,7 @@ public class SudokuGame {
 	}
 
 
-	public static boolean fillBoard(int[][] game, int x, int y) {
+	public static boolean createBoard(int[][] game, int x, int y) {
 		if (x >= game[y].length) {
 			x = 0;
 			if (++y >= game.length) {
@@ -157,7 +157,7 @@ public class SudokuGame {
 		for (int num = 1; num <= 9; num++) {
 			if (validAssingment(game, x, y, num)) {
 				game[y][x] = num;
-				if (fillBoard(game, x + 1, y)) {
+				if (createBoard(game, x + 1, y)) {
 					return true;
 				}
 				game[y][x] = 0;
@@ -219,8 +219,7 @@ public class SudokuGame {
 		sb.append("\n");
 		for (int y = 0; y < board.length; y++) {
 			for (int x = 0; x < board[y].length; x++) {
-				Integer value = board[y][x];
-				sb.append(value == null ? "_" : value);
+				sb.append(board[y][x]);
 				sb.append(" ");
 				if ((x + 1) % 3 == 0) {
 					sb.append(" ");
@@ -236,7 +235,7 @@ public class SudokuGame {
 
 	public static void main(String[] args) {
 		int[][] game = new int[BOARD_SIZE][BOARD_SIZE];
-		fillBoard(game, 0, 0);
+		createBoard(game, 0, 0);
 		System.out.println(printGame(game));
 //		SudokuGame game = new SudokuGame(MAX_CLUES);
 //		System.out.println(game.toString());

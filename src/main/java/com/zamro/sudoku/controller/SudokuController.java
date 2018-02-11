@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 public class SudokuController {
 
 	@GetMapping
-	public @ResponseBody Integer[][] getBoard() {
-		SudokuGame game = new SudokuGame();
+	public @ResponseBody Integer[][] getBoard(int totalClues) {
+		SudokuGame game = new SudokuGame(totalClues);
 		return game.getBoard();
 	}
 

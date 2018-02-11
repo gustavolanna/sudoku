@@ -158,4 +158,9 @@ public class SudokuGameTest {
 		assertTrue(invalidPositions.get(3) == 56);
 	}
 
+	@Test
+	public void shouldReturnGameWithThirtyFourValues() {
+		SudokuGame game = new SudokuGame(34);
+		assertEquals(game.getTotalValues(), 34);
+	}
 }

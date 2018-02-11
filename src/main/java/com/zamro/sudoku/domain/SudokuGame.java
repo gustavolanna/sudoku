@@ -1,5 +1,6 @@
 package com.zamro.sudoku.domain;
 
+import com.zamro.sudoku.util.SudokuUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,8 +9,6 @@ import java.util.*;
 public class SudokuGame {
 
 	public static final int BOARD_SIZE = 9;
-
-	private static final Integer[] NUMBERS = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -23,9 +22,14 @@ public class SudokuGame {
 		log.info("creating new game with board " + board);
 	}
 
-	public SudokuGame() {
+	public SudokuGame(int clues) {
 		board = new Integer[BOARD_SIZE][BOARD_SIZE];
-		solveBoard(board, 0, 0, randomNumbers());
+		solveBoard(board, 0, 0, SudokuUtil.randomNumbers());
+		clear(SudokuUtil.randomPositions(SudokuUtil.POSITIONS.length - clues));
+	}
+
+	public SudokuGame() {
+		this(BOARD_SIZE * BOARD_SIZE);
 	}
 
 	public Integer[][] getBoard() {
@@ -40,22 +44,31 @@ public class SudokuGame {
 		return validator.validateGame(board);
 	}
 
-	private List<Integer> randomNumbers() {
-		Random random = new Random();
-		List<Integer> orderedList = new LinkedList(Arrays.asList(NUMBERS));
-		List<Integer> randomList = new ArrayList<>();
-		while (!orderedList.isEmpty()) {
-			Integer randomValue = orderedList.remove(random.nextInt(orderedList.size()));
-			randomList.add(randomValue);
-		}
-		return randomList;
-	}
-
 	public boolean solveBoard() {
-		return solveBoard(board, 0, 0, randomNumbers());
+		return solveBoard(board, 0, 0, SudokuUtil.randomNumbers());
 	}
 
-	private boolean solveBoard(Integer[][] game, int x, int y, List<Integer> numbers) {
+	public int getTotalValues() {
+		int total = 0;
+		for (int y = 0; y < board.length; y++) {
+			for (int x = 0; x < board[y].length; x++) {
+				if (board[y][x] != null) {
+					total++;
+				}
+			}
+		}
+		return total;
+	}
+
+	public void clear(List<Integer> positions) {
+		for (Integer position: positions) {
+			int x = position % SudokuGame.BOARD_SIZE;
+			int y = (int) Math.floor(position / SudokuGame.BOARD_SIZE);
+			board[y][x] = null;
+		}
+	}
+
+	private boolean solveBoard(Integer[][] game, int x, int y, List<Integer> randomNumbers) {
 		if (x >= game[y].length) {
 			x = 0;
 			if (++y >= game.length) {
@@ -63,12 +76,12 @@ public class SudokuGame {
 			}
 		}
 		if (game[y][x] != null) {
-			return solveBoard(game, x + 1, y, numbers);
+			return solveBoard(game, x + 1, y, randomNumbers);
 		} else {
-			for (Integer number : numbers) {
+			for (Integer number : randomNumbers) {
 				if (validator.isValidAssignment(game, x, y, number)) {
 					game[y][x] = number;
-					if (solveBoard(game, x + 1, y, numbers)) {
+					if (solveBoard(game, x + 1, y, randomNumbers)) {
 						return true;
 					}
 					game[y][x] = null;

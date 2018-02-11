@@ -17,7 +17,7 @@ public class SudokuGame {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private int[][] board;
+	private Integer[][] board;
 
 	private SudokuValidator validator;
 
@@ -28,7 +28,7 @@ public class SudokuGame {
 	}
 
 	public SudokuGame() {
-		board = new int[BOARD_SIZE][BOARD_SIZE];
+		board = new Integer[BOARD_SIZE][BOARD_SIZE];
 		createBoard(board, 0, 0);
 //		Random random = new Random();
 	}
@@ -71,7 +71,7 @@ public class SudokuGame {
 	}
 
 
-	public boolean createBoard(int[][] game, int x, int y) {
+	public boolean createBoard(Integer[][] game, int x, int y) {
 		if (x >= game[y].length) {
 			x = 0;
 			if (++y >= game.length) {
@@ -84,24 +84,24 @@ public class SudokuGame {
 				if (createBoard(game, x + 1, y)) {
 					return true;
 				}
-				game[y][x] = 0;
+				game[y][x] = null;
 			}
 		}
 		return false;
 	}
 
-	private boolean isValidAssignment(int[][] game, int x, int y, int value) {
+	private boolean isValidAssignment(Integer[][] game, int x, int y, int value) {
 		return !hasValueInRow(game[y], value) &&
 				!hasValueInCol(game, x, value) &&
 				!hasValueInBlock(game, x, y, value);
 	}
 
-	private boolean hasValueInBlock(int[][] game, int x, int y, int value) {
+	private boolean hasValueInBlock(Integer[][] game, int x, int y, int value) {
 		int offSetX = x - (x % BLOCK_SIZE) + BLOCK_SIZE;
 		int offSetY = y - (y % BLOCK_SIZE) + BLOCK_SIZE;
 		for (int startY = y - (y % BLOCK_SIZE); startY < offSetY; startY++) {
 			for (int startX = x - (x % BLOCK_SIZE); startX < offSetX; startX++) {
-				if (game[startY][startX] == value) {
+				if (game[startY][startX] != null && game[startY][startX] == value) {
 					return true;
 				}
 			}
@@ -109,18 +109,18 @@ public class SudokuGame {
 		return false;
 	}
 
-	private boolean hasValueInCol(int[][] game, int x, int value) {
+	private boolean hasValueInCol(Integer[][] game, int x, int value) {
 		for (int y = 0; y < game.length; y++) {
-			if (game[y][x] == value) {
+			if (game[y][x] != null && game[y][x] == value) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private boolean hasValueInRow(int[] row, int value) {
+	private boolean hasValueInRow(Integer[] row, int value) {
 		for (int x = 0; x < row.length; x++) {
-			if (row[x] == value) {
+			if (row[x] != null && row[x] == value) {
 				return true;
 			}
 		}

@@ -20,11 +20,12 @@ public class SudokuGame {
 	public SudokuGame(Integer[][] board) {
 		validator.validate(board);
 		this.board = board;
+		log.info("creating new game with board " + board);
 	}
 
 	public SudokuGame() {
 		board = new Integer[BOARD_SIZE][BOARD_SIZE];
-		fillBoard(board, 0, 0, randomNumbers());
+		solveBoard(board, 0, 0, randomNumbers());
 	}
 
 	public Integer[][] getBoard() {
@@ -50,11 +51,11 @@ public class SudokuGame {
 		return randomList;
 	}
 
-	public boolean fillBoard() {
-		return fillBoard(board, 0, 0, randomNumbers());
+	public boolean solveBoard() {
+		return solveBoard(board, 0, 0, randomNumbers());
 	}
 
-	private boolean fillBoard(Integer[][] game, int x, int y, List<Integer> numbers) {
+	private boolean solveBoard(Integer[][] game, int x, int y, List<Integer> numbers) {
 		if (x >= game[y].length) {
 			x = 0;
 			if (++y >= game.length) {
@@ -62,12 +63,12 @@ public class SudokuGame {
 			}
 		}
 		if (game[y][x] != null) {
-			return fillBoard(game, x + 1, y, numbers);
+			return solveBoard(game, x + 1, y, numbers);
 		} else {
 			for (Integer number : numbers) {
 				if (validator.isValidAssignment(game, x, y, number)) {
 					game[y][x] = number;
-					if (fillBoard(game, x + 1, y, numbers)) {
+					if (solveBoard(game, x + 1, y, numbers)) {
 						return true;
 					}
 					game[y][x] = null;

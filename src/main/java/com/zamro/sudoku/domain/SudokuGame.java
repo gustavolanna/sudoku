@@ -40,8 +40,31 @@ public class SudokuGame {
 		List<List<Integer>> positions = randomList(random);
 		List<Integer> randomClues = randomClues(random, clues);
 		for (int blockNum = 0; blockNum < BOARD_SIZE; blockNum++) {
-			setClues(blockNum, randomClues, numbers.get(blockNum), positions.get(blockNum));
+			fillBoard(blockNum, randomClues, numbers.get(blockNum), positions.get(blockNum));
 		}
+	}
+
+	private boolean solveGame(int x, int y) {
+		if (!gameSolved()) {
+			for (int value = 1; value <= 9; value++) {
+				if (setValue(x, y, value)) {
+					return solveGame(x + 1, y + 1);
+				}
+			}
+			return false;
+		}
+		return true;
+	}
+
+	private boolean gameSolved() {
+		for (int y = 0; y < board.length; y++) {
+			for (int x = 0; x < board[y].length; x++) {
+				if (board[y][x] == null) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	private List<List<Integer>> randomList(Random random) {
@@ -71,7 +94,7 @@ public class SudokuGame {
 		return clues;
 	}
 
-	private void setClues(int blockNum, List<Integer> totalClues, List<Integer> numbers, List<Integer> positions) {
+	private void fillBoard(int blockNum, List<Integer> totalClues, List<Integer> numbers, List<Integer> positions) {
 		Pos pos = getBlockPosition(blockNum);
 		int clues = totalClues.get(blockNum);
 		while (clues > 0 && !numbers.isEmpty()) {
@@ -123,9 +146,100 @@ public class SudokuGame {
 		return sb.toString();
 	}
 
+
+	public static boolean fillBoard(int[][] game, int x, int y) {
+		if (x >= game[y].length) {
+			x = 0;
+			if (++y >= game.length) {
+				return true;
+			}
+		}
+		for (int num = 1; num <= 9; num++) {
+			if (validAssingment(game, x, y, num)) {
+				game[y][x] = num;
+				if (fillBoard(game, x + 1, y)) {
+					return true;
+				}
+				game[y][x] = 0;
+			}
+		}
+		return false;
+	}
+
+	private static boolean validAssingment(int[][] game, int x, int y, int value) {
+		return !hasValueInRow(game[y], value) &&
+				!hasValueInCol(game, x, value) &&
+				!hasValueInBlock(game, x, y, value);
+	}
+
+	private static boolean hasValueInBlock(int[][] game, int x, int y, int value) {
+		int offSetX = x - (x % BLOCK_SIZE) + BLOCK_SIZE;
+		int offSetY = y - (y % BLOCK_SIZE) + BLOCK_SIZE;
+		for (int startY = y - (y % BLOCK_SIZE); startY < offSetY; startY++) {
+			for (int startX = x - (x % BLOCK_SIZE); startX < offSetX; startX++) {
+				if (game[startY][startX] == value) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private static boolean hasValueInCol(int[][] game, int x, int value) {
+		for (int y = 0; y < game.length; y++) {
+			if (game[y][x] == value) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean hasValueInRow(int[] row, int value) {
+		for (int x = 0; x < row.length; x++) {
+			if (row[x] == value) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+//	private static boolean hasFreePositions(int[][] game) {
+//		for (int y = 0; y < game.length; y++) {
+//			for (int x = 0; x < game[y].length; x++) {
+//				if (game[y][x] == 0) {
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
+
+	public static String printGame(int[][] board) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("\n");
+		for (int y = 0; y < board.length; y++) {
+			for (int x = 0; x < board[y].length; x++) {
+				Integer value = board[y][x];
+				sb.append(value == null ? "_" : value);
+				sb.append(" ");
+				if ((x + 1) % 3 == 0) {
+					sb.append(" ");
+				}
+			}
+			if ((y + 1) % 3 == 0) {
+				sb.append("\n");
+			}
+			sb.append("\n");
+		}
+		return sb.toString();
+	}
+
 	public static void main(String[] args) {
-		SudokuGame game = new SudokuGame(MAX_CLUES);
-		System.out.println(game.toString());
+		int[][] game = new int[BOARD_SIZE][BOARD_SIZE];
+		fillBoard(game, 0, 0);
+		System.out.println(printGame(game));
+//		SudokuGame game = new SudokuGame(MAX_CLUES);
+//		System.out.println(game.toString());
 	}
 }
 

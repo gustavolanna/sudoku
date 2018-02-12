@@ -20,11 +20,13 @@ class SudokuCell extends Component {
     }
 
     render() {
-        let className = " defaultValue";
+        let className;
         if (this.props.fixed) {
             className = " fixedValue";
         } else if (this.props.invalid) {
             className = " invalidValue";
+        } else {
+            className = " defaultValue";
         }
         return (<div className="box"><input type="text" 
                                             className={className}

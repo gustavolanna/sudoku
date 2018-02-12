@@ -10,7 +10,7 @@ class Sudoku extends Component {
         super(props);
         this.state = {
             message: null,
-            warningMessage: false,
+            warning: false,
             invalidValues: [],
             fixedValues: [],
             board: [],

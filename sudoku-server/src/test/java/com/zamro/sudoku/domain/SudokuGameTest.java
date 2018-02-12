@@ -150,7 +150,7 @@ public class SudokuGameTest {
 				{8, 3, 4,  5, 1, 2,  6, 9, 7}
 		};
 		SudokuGame game = new SudokuGame(board);
-		List<Integer> invalidPositions = game.getInvalidPositions();
+		List<Integer> invalidPositions = game.getInvalidValues();
 		assertEquals(invalidPositions.size(), 4);
 		assertTrue(invalidPositions.get(0) == 0);
 		assertTrue(invalidPositions.get(1) == 20);

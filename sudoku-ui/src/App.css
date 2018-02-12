@@ -59,12 +59,25 @@ input {
   }  
 }
 
+.invalidValue {
+    color: #b60c29;
+}
+
+.fixedValue {
+    color: #044d72;
+}
+
 .box {
   background-color: #2c8ec7;
   color: #fff;
   border-radius: 2px;
   padding: 2px;
   font-size: 150%;
+}
+
+.warningMessage {
+    color: rgb(252, 150, 67);
+    height: 5px;
 }
 
 button {

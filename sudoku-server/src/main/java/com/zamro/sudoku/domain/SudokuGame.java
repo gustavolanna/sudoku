@@ -40,7 +40,7 @@ public class SudokuGame {
 		return validator.validate(this);
 	}
 
-	public List<Integer> getInvalidPositions() {
+	public List<Integer> getInvalidValues() {
 		return validator.validateGame(board);
 	}
 

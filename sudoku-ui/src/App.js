@@ -7,23 +7,17 @@ import api from './Api';
 
 class App extends Component {
 
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <div><img src={Logo} className="App-logo" alt="logo" /></div>
-          <div><img src={SudokuImg} className="App-logo" alt="logo" /></div>
-        </header>
-        <p className="App-intro">
-          Here is the puzzle. Good luck!
-        </p>
-        <Sudoku loadGame={api.loadGame}
-          validateGame={api.validateGame} />
-        <button>Check</button>
-        <button>Solve</button>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div className="App">
+                <header className="App-header">
+                    <div><img src={Logo} className="App-logo" alt="logo" /></div>
+                    <div><img src={SudokuImg} className="App-logo" alt="logo" /></div>
+                </header>
+                <Sudoku loadGame={api.loadGame} validateGame={api.validateGame} solveGame={api.solveGame}/>
+            </div>
+        );
+    }
 }
 
 export default App;

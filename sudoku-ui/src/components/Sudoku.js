@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SudokuCell from './SudokuCell';
+import PropTypes from 'prop-types';
 
 const DEFAULT_CLUES = 34;
 
@@ -8,9 +9,38 @@ class Sudoku extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            message: null,
+            invalidValues: [],
+            fixedValues: [],
             board: []
         };
+        this.updateState = this.updateState.bind(this);
         this.updateBoard = this.updateBoard.bind(this);
+        this.validateGame = this.validateGame.bind(this);
+        this.solveGame = this.solveGame.bind(this);
+    }
+
+    componentWillMount() { 
+        this.props.loadGame(DEFAULT_CLUES).then(this.updateState);
+    }
+
+    updateState(response) {
+        let fixedValues = this.state.fixedValues;
+        if (fixedValues.length == 0) {
+            const game = response.data.game;
+            game.forEach((line, x) => line.forEach((value, y) => {
+                if (value) {
+                    fixedValues.push(x + (y * game.length))
+                }
+            }));
+        }
+        this.setState({
+            ...this.state,
+            fixedValues,
+            message: response.data.message,
+            invalidValues: response.data.invalidValues,
+            board: response.data.game
+        });
     }
 
     updateBoard(value, x, y) {
@@ -18,29 +48,50 @@ class Sudoku extends Component {
         board[x][y] = value;
         this.setState({ ...this.state, board});
     }
-
-    componentWillMount() { 
-        this.props.loadGame(DEFAULT_CLUES).then(result => {
-            this.setState({
-                original: result.data,
-                board: result.data
-            });
-        });
-    }
     
+    validateGame() {
+        this.props.validateGame(this.state.board).then(this.updateState);
+    }
+
+    solveGame() {
+        this.props.solveGame(this.state.board).then(this.updateState);
+    }
+
     renderCell(value, x, y) {
         const key = x + (y * this.state.board.length);
-        return <SudokuCell key={key} value={value} x={x} y={y} updateBoard={this.updateBoard} />;
+        const invalid = this.state.invalidValues.find(value => value == key) >= 0;
+        const fixed = this.state.fixedValues.find(value => value == key) >= 0;
+        return <SudokuCell  key={key} 
+                            value={value} 
+                            x={x} y={y} 
+                            updateBoard={this.updateBoard} 
+                            invalid={invalid}
+                            fixed={fixed}/>;
     }
 
     render() {
+        if (this.state.board.length == 0) {
+            return <div>Loading...</div>
+        }
         return (
-            <div className="wrapper">
-                {this.state.board.map((line, x) => line.map((value, y) => this.renderCell(value, x, y)))}
+            <div>
+                <p className="App-intro">Here is the puzzle. Good luck!</p>
+                <div className="wrapper">
+                    {this.state.board.map((line, x) => line.map((value, y) => this.renderCell(value, x, y)))}
+                </div>
+                <p className="warningMessage">{this.state.message}</p>
+                <button onClick={this.validateGame}>Validate</button>
+                <button onClick={this.solveGame}>Solve</button>
             </div>
         )
     }
 
+}
+
+Sudoku.propTypes = {
+    loadGame: PropTypes.func.isRequired,
+    validateGame: PropTypes.func.isRequired,
+    solveGame: PropTypes.func.isRequired
 }
 
 export default Sudoku;

@@ -15,4 +15,9 @@ public class ExceptionHandlerAdvice {
 		return new ResponseEntity(new SudokuGameDTO(ex.getGame(), ex.getMessage()), HttpStatus.BAD_REQUEST);
 	}
 
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<SudokuGameDTO> handleAnyOtherException(Exception ex) {
+		return new ResponseEntity(new SudokuGameDTO(null, ex.getMessage()), HttpStatus.BAD_REQUEST);
+	}
+
 }

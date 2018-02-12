@@ -6,6 +6,8 @@ import java.util.List;
 
 public class SudokuGameDTO {
 
+	private boolean warning;
+
 	private String message;
 
 	private List<Integer> invalidValues;
@@ -15,13 +17,17 @@ public class SudokuGameDTO {
 	public SudokuGameDTO(Integer[][] game, String message) {
 		this.message = message;
 		this.game = game;
+		this.warning = true;
 	}
 
 	public SudokuGameDTO(SudokuGame game) {
 		this.invalidValues = game.getInvalidValues();
 		this.game = game.getBoard();
 		if (!invalidValues.isEmpty()) {
-			this.message = "This game has invalid values.";
+			this.message  = "This game has invalid values.";
+			this.warning = true;
+		} else if (game.isSolved()) {
+			this.message = "Puzzle solved!";
 		}
 	}
 
@@ -37,4 +43,7 @@ public class SudokuGameDTO {
 		return message;
 	}
 
+	public boolean getWarning() {
+		return warning;
+	}
 }

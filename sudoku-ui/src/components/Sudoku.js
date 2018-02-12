@@ -10,9 +10,11 @@ class Sudoku extends Component {
         super(props);
         this.state = {
             message: null,
+            warningMessage: false,
             invalidValues: [],
             fixedValues: [],
-            board: []
+            board: [],
+            original: []
         };
         this.updateState = this.updateState.bind(this);
         this.updateBoard = this.updateBoard.bind(this);
@@ -28,16 +30,22 @@ class Sudoku extends Component {
         let fixedValues = this.state.fixedValues;
         if (fixedValues.length == 0) {
             const game = response.data.game;
-            game.forEach((line, x) => line.forEach((value, y) => {
+            game.forEach((line, y) => line.forEach((value, x) => {
                 if (value) {
                     fixedValues.push(x + (y * game.length))
                 }
             }));
         }
+        let original = this.state.original;
+        if (original.length == 0) {
+            original = response.data.game.map(l => l.map(v => v));
+        }
         this.setState({
             ...this.state,
             fixedValues,
+            original,
             message: response.data.message,
+            warning: response.data.warning,
             invalidValues: response.data.invalidValues,
             board: response.data.game
         });
@@ -45,7 +53,7 @@ class Sudoku extends Component {
 
     updateBoard(value, x, y) {
         let board = [...this.state.board];
-        board[x][y] = value;
+        board[y][x] = value;
         this.setState({ ...this.state, board});
     }
     
@@ -54,7 +62,7 @@ class Sudoku extends Component {
     }
 
     solveGame() {
-        this.props.solveGame(this.state.board).then(this.updateState);
+        this.props.solveGame(this.state.original).then(this.updateState);
     }
 
     renderCell(value, x, y) {
@@ -77,9 +85,9 @@ class Sudoku extends Component {
             <div>
                 <p className="App-intro">Here is the puzzle. Good luck!</p>
                 <div className="wrapper">
-                    {this.state.board.map((line, x) => line.map((value, y) => this.renderCell(value, x, y)))}
+                    {this.state.board.map((line, y) => line.map((value, x) => this.renderCell(value, x, y)))}
                 </div>
-                <p className="warningMessage">{this.state.message}</p>
+                <p className={this.state.warning ? "warningMessage" : "message"}>{this.state.message}</p>
                 <button onClick={this.validateGame}>Validate</button>
                 <button onClick={this.solveGame}>Solve</button>
             </div>

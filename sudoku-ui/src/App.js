@@ -1,25 +1,26 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import Logo from './logo.png';
+import SudokuImg from './Sudoku.png';
 import './App.css';
 import Sudoku from './components/Sudoku';
-import {loadGame, validateGame, solveGame} from './Api';
+import api from './Api';
 
 class App extends Component {
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <div><img src={Logo} className="App-logo" alt="logo" /></div>
+          <div><img src={SudokuImg} className="App-logo" alt="logo" /></div>
         </header>
         <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
+          Here is the puzzle. Good luck!
         </p>
-        <body>
-          <Sudoku loadGame={loadGame}
-                  validateGame={validateGame}
-                  solveGame={solveGame}/>
-        </body>
+        <Sudoku loadGame={api.loadGame}
+          validateGame={api.validateGame} />
+        <button>Check</button>
+        <button>Solve</button>
       </div>
     );
   }

@@ -26,3 +26,23 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+body {
+  margin: auto;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px 50px;
+  grid-gap: 5px;
+  background-color: #fff;
+  color: #444;
+}
+
+.box {
+  background-color: #5395bb;
+  color: #fff;
+  border-radius: 2px;
+  padding: 5px;
+  font-size: 150%;
+}

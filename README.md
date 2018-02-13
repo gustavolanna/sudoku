@@ -1,6 +1,6 @@
 <h3> Sudoku puzzle </h3>
 
-To run this game run the following commands:
+To play this game run the following commands:
 
 ```bash
 $ git clone https://github.com/gustavolanna/sudoku.git

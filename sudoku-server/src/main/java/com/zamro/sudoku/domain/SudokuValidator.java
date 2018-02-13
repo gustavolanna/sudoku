@@ -1,8 +1,5 @@
 package com.zamro.sudoku.domain;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,10 +7,7 @@ public class SudokuValidator {
 
 	public static final int BLOCK_SIZE = 3;
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-
 	public boolean validate(SudokuGame game) {
-		log.info("Validating game: \n" + game);
 		return validate(game.getBoard()) && validateGame(game.getBoard()).isEmpty();
 	}
 
@@ -21,7 +15,6 @@ public class SudokuValidator {
 		if (board == null) {
 			throw new SudokuException(board, "Board cannot be null. It should be a 9 x 9 matrix");
 		}
-		log.info("Validating board: \n" + board);
 		return validateBoundaries(board) && validateValues(board);
 	}
 

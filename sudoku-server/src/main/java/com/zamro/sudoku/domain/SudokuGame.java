@@ -23,6 +23,7 @@ public class SudokuGame {
 	}
 
 	public SudokuGame(int clues) {
+		log.info("creating new game with " + clues + " clues");
 		board = new Integer[BOARD_SIZE][BOARD_SIZE];
 		solveBoard(board, 0, 0, SudokuUtil.randomNumbers());
 		clear(SudokuUtil.randomPositions(SudokuUtil.POSITIONS.length - clues));
@@ -61,6 +62,7 @@ public class SudokuGame {
 	}
 
 	public void clear(List<Integer> positions) {
+		log.info("clearing positions");
 		for (Integer position: positions) {
 			int x = position % SudokuGame.BOARD_SIZE;
 			int y = (int) Math.floor(position / SudokuGame.BOARD_SIZE);
@@ -72,6 +74,7 @@ public class SudokuGame {
 		if (x >= game[y].length) {
 			x = 0;
 			if (++y >= game.length) {
+				log.info("Solution founded");
 				return true;
 			}
 		}

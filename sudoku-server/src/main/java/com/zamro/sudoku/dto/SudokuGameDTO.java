@@ -31,6 +31,16 @@ public class SudokuGameDTO {
 		}
 	}
 
+	public SudokuGameDTO(SudokuGame game, boolean validate) {
+		this(game);
+		if (!this.warning) {
+			this.message = "This game still valid!";
+		}
+	}
+
+
+
+
 	public List<Integer> getInvalidValues() {
 		return invalidValues;
 	}

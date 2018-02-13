@@ -15,7 +15,7 @@ public class SudokuController {
 
 	@PostMapping("/validate")
 	public @ResponseBody SudokuGameDTO validateBoard(@RequestBody Integer[][] board) {
-		return new SudokuGameDTO(new SudokuGame(board));
+		return new SudokuGameDTO(new SudokuGame(board), true);
 	}
 
 	@PutMapping("/solve")

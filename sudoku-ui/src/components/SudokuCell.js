@@ -16,7 +16,7 @@ class SudokuCell extends Component {
     }
 
     onChange(e) {
-        this.props.updateBoard(parseInt(e.target.value), this.props.x, this.props.y);
+        this.props.updateBoard(parseInt(e.target.value, 10), this.props.x, this.props.y);
     }
 
     render() {

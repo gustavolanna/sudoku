@@ -37,7 +37,7 @@
 input {
     width: 40px;
     border: none;
-    background-color: #2c8ec7;
+    background-color: transparent;
     font-size: 100%;
     text-align: center;
 }
@@ -72,6 +72,29 @@ input {
     padding: 2px;
     font-size: 150%;
 }
+
+.box:nth-child(-n+3), 
+.box:nth-child(n+10):nth-child(-n+12),
+.box:nth-child(n+19):nth-child(-n+21),
+
+.box:nth-child(n+7):nth-child(-n+9),
+.box:nth-child(n+16):nth-child(-n+19),
+.box:nth-child(n+25):nth-child(-n+27),
+
+.box:nth-child(n+31):nth-child(-n+33),
+.box:nth-child(n+40):nth-child(-n+42),
+.box:nth-child(n+49):nth-child(-n+51),
+
+.box:nth-child(n+55):nth-child(-n+57),
+.box:nth-child(n+64):nth-child(-n+66),
+.box:nth-child(n+73):nth-child(-n+75),
+
+.box:nth-child(n+61):nth-child(-n+63),
+.box:nth-child(n+70):nth-child(-n+72),
+.box:nth-child(n+79):nth-child(-n+81)  {
+    background-color: #69b0da;
+}
+
 
 .warningMessage {
     color: rgb(252, 150, 67);

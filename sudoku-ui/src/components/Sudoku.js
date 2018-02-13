@@ -20,10 +20,19 @@ class Sudoku extends Component {
         this.updateBoard = this.updateBoard.bind(this);
         this.validateGame = this.validateGame.bind(this);
         this.solveGame = this.solveGame.bind(this);
+        this.handleErros = this.handleErros.bind(this);
     }
 
     componentWillMount() { 
-        this.props.loadGame(DEFAULT_CLUES).then(this.updateState);
+        this.props.loadGame(DEFAULT_CLUES).then(this.updateState).catch(this.handleErros);
+    }
+
+    handleErros(response) {
+        this.setState({
+            ...this.state,
+            message: response.message,
+            warning: true
+        })
     }
 
     updateState(response) {
@@ -58,11 +67,11 @@ class Sudoku extends Component {
     }
     
     validateGame() {
-        this.props.validateGame(this.state.board).then(this.updateState);
+        this.props.validateGame(this.state.board).then(this.updateState).catch(this.handleErros);
     }
 
     solveGame() {
-        this.props.solveGame(this.state.original).then(this.updateState);
+        this.props.solveGame(this.state.original).then(this.updateState).catch(this.handleErros);
     }
 
     renderCell(value, x, y) {
@@ -78,7 +87,9 @@ class Sudoku extends Component {
     }
 
     render() {
-        if (this.state.board.length == 0) {
+        if (this.state.board.length == 0 && this.state.warning) {
+            return <p className={this.state.warning ? "warningMessage" : "message"}>{this.state.message}</p>
+        } else if (this.state.board.length == 0) {
             return <div>Loading...</div>
         }
         return (

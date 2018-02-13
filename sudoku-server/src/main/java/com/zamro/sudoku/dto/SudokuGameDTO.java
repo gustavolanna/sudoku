@@ -33,7 +33,7 @@ public class SudokuGameDTO {
 
 	public SudokuGameDTO(SudokuGame game, boolean validate) {
 		this(game);
-		if (!this.warning) {
+		if (validate && !this.warning) {
 			this.message = "This game still valid!";
 		}
 	}

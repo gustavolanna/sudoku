@@ -25,7 +25,7 @@ public class SudokuGame {
 	public SudokuGame(int clues) {
 		log.info("creating new game with " + clues + " clues");
 		board = new Integer[BOARD_SIZE][BOARD_SIZE];
-		solveBoard(board, 0, 0, SudokuUtil.randomNumbers());
+		solveBoard(0, 0, SudokuUtil.randomNumbers());
 		clear(SudokuUtil.randomPositions(SudokuUtil.POSITIONS.length - clues));
 	}
 
@@ -46,7 +46,7 @@ public class SudokuGame {
 	}
 
 	public boolean solveBoard() {
-		return solveBoard(board, 0, 0, SudokuUtil.randomNumbers());
+		return solveBoard(0, 0, SudokuUtil.randomNumbers());
 	}
 
 	public int getTotalValues() {
@@ -70,24 +70,24 @@ public class SudokuGame {
 		}
 	}
 
-	private boolean solveBoard(Integer[][] game, int x, int y, List<Integer> randomNumbers) {
-		if (x >= game[y].length) {
+	private boolean solveBoard(int x, int y, List<Integer> randomNumbers) {
+		if (x >= board[y].length) {
 			x = 0;
-			if (++y >= game.length) {
-				log.info("Solution founded");
+			if (++y >= board.length) {
+				log.info("Solution found");
 				return true;
 			}
 		}
-		if (game[y][x] != null) {
-			return solveBoard(game, x + 1, y, randomNumbers);
+		if (board[y][x] != null) {
+			return solveBoard(x + 1, y, randomNumbers);
 		} else {
 			for (Integer number : randomNumbers) {
-				if (validator.isValidAssignment(game, x, y, number)) {
-					game[y][x] = number;
-					if (solveBoard(game, x + 1, y, randomNumbers)) {
+				if (validator.isValidAssignment(board, x, y, number)) {
+					board[y][x] = number;
+					if (solveBoard(x + 1, y, randomNumbers)) {
 						return true;
 					}
-					game[y][x] = null;
+					board[y][x] = null;
 				}
 			}
 		}

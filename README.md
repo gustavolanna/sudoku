@@ -4,7 +4,7 @@ To run this game run the following commands:
 
 ```bash
 $ git clone https://github.com/gustavolanna/sudoku.git
-$ cd sudoky/sudoku-server
+$ cd sudoku/sudoku-server
 $ mvn spring-boot:run
 ```
 This will start sudoku-server on port 8080

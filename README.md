@@ -15,5 +15,10 @@ In another terminal do the following:
 $ cd sudoku-ui
 $ npm start
 ```
-
 This will start the UI on port 3000
+
+
+You can play this game at https://safe-taiga-79698.herokuapp.com/
+
+Have fun!
+
